@@ -174,7 +174,7 @@ module Pickup
       sorted_players.each do |p|
         gclass = $classes[ @registered_players[p].gclass ]
 
-        if red_team_skill < blue_team_skill or blue_team_classes_left[gclass] == 0
+        if (red_team_skill < blue_team_skill or blue_team_classes_left[gclass] == 0) and red_team_classes_left[gclass] != 0
           red_team_skill += p.class_skill(gclass)
           red_team_classes_left[gclass] -= 1
           @registered_players[p].team = @@RED
