@@ -412,7 +412,7 @@ module Pickup
       p = Player.find_or_create_by_authname(m.user.authname)
 
       if not p.admin?
-        m.reply("3" + "Cette commande est reservé aux administrateurs.")
+        m.reply("3" + "Cette commande est reservée aux administrateurs.")
         return
       end
 

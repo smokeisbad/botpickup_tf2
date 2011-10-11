@@ -174,7 +174,7 @@ module Pickup
       sorted_players.each do |p|
         gclass = $classes[ @registered_players[p].gclass ]
 
-        if red_team_skill < blue_team_skill or blue_team_classes_left[gclass] == 0
+        if ( (red_team_skill < blue_team_skill or blue_team_classes_left[gclass] == 0) and red_team_classes_left[gclass] != 0 )
           red_team_skill += p.class_skill(gclass)
           red_team_classes_left[gclass] -= 1
           @registered_players[p].team = @@RED
@@ -208,18 +208,10 @@ module Pickup
       chan = bot.Channel(channel.name)
       blue_team = []
       red_team = []
-
-      competes.each do |c|
-        c.player.user.send("3" + "Vous êtes #{c.to_s_verbose}")
-        c.player.user.send("3" + "connect #{server.ip_address}:#{server.port.to_s}; password #{server.password}")
-        if c.team == @@BLUE
-            blue_team.push(c)
-        else
-            red_team.push(c)
-        end
-      end
-
-      msg = "3" + "Lancement du pickup sur le serveur no " + self.server.id.to_s + " et la map " + self.map.name + "\n"
+	  
+	  # Public message to the chan
+	  msg = "3" + "Lancement du pickup sur le serveur no " + self.server.id.to_s + " et la map " + self.map.name + "\n"
+	  msg += "3" + "connect #{server.ip_address}:#{server.port.to_s}; password #{server.password}"
       msg += "12" + "Équipe bleue :: "
 
       blue_team.each do |c|
@@ -232,6 +224,17 @@ module Pickup
       end
       msg = msg.chop.chop
       chan.send(msg)
+
+	  # Private messages to each players
+      competes.each do |c|
+        c.player.user.send("3" + "Vous êtes #{c.to_s_verbose}")
+        c.player.user.send("3" + "connect #{server.ip_address}:#{server.port.to_s}; password #{server.password}")
+        if c.team == @@BLUE
+            blue_team.push(c)
+        else
+            red_team.push(c)
+        end
+      end
     end
 
     def pre_start
